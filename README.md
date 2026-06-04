@@ -70,13 +70,14 @@ Hosted deployments can use Auth0 for identity while the app continues to authori
 
 Required server-side environment variables:
 
-| Variable              | Purpose                                                                     |
-| --------------------- | --------------------------------------------------------------------------- |
-| `APP_BASE_URL`        | Production app base URL, for example `https://api-usage-mu.vercel.app:443`. |
-| `AUTH0_DOMAIN`        | Auth0 tenant domain.                                                        |
-| `AUTH0_CLIENT_ID`     | Auth0 application client ID.                                                |
-| `AUTH0_CLIENT_SECRET` | Server-only Auth0 client secret.                                            |
-| `AUTH0_SECRET`        | 64-character hex secret used by the Auth0 SDK to encrypt session cookies.   |
+| Variable                           | Purpose                                                                                                                                   |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `APP_BASE_URL`                     | Production app base URL, for example `https://api-usage-mu.vercel.app:443`.                                                               |
+| `AUTH0_DOMAIN`                     | Auth0 tenant domain.                                                                                                                      |
+| `AUTH0_CLIENT_ID`                  | Auth0 application client ID.                                                                                                              |
+| `AUTH0_CLIENT_SECRET`              | Server-only Auth0 client secret.                                                                                                          |
+| `AUTH0_SECRET`                     | 64-character hex secret used by the Auth0 SDK to encrypt session cookies.                                                                 |
+| `AUTH0_UNVERIFIED_EMAIL_ALLOWLIST` | Optional comma-separated test email allowlist for Auth0 database users that cannot be marked verified. Leave unset outside test accounts. |
 
 The Auth0 application must allow `https://api-usage-mu.vercel.app/auth/callback` as a callback URL and `https://api-usage-mu.vercel.app/` as a logout URL.
 

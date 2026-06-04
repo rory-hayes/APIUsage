@@ -39,14 +39,14 @@ export function createAuth0LoginSession(
   now = new Date(),
   additionalInvitedUsers: InvitedUser[] = []
 ): Auth0LoginSessionResult {
-  if (profile.email_verified === false) {
+  const email = profile.email?.trim().toLowerCase()
+
+  if (profile.email_verified === false && !isUnverifiedEmailAllowed(email)) {
     return {
       ok: false,
       error: 'email_unverified',
     }
   }
-
-  const email = profile.email?.trim().toLowerCase()
 
   if (!email) {
     return {
@@ -83,4 +83,17 @@ export function createAuth0LoginSession(
     token,
     session: verifySessionToken(token, secret, now),
   }
+}
+
+function isUnverifiedEmailAllowed(email: string | undefined): boolean {
+  if (!email) {
+    return false
+  }
+
+  return new Set(
+    (process.env.AUTH0_UNVERIFIED_EMAIL_ALLOWLIST ?? '')
+      .split(',')
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean)
+  ).has(email)
 }
