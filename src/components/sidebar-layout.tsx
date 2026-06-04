@@ -32,7 +32,7 @@ function MobileSidebar({ open, close, children }: React.PropsWithChildren<{ open
         transition
         className="fixed inset-y-0 w-full max-w-80 p-2 transition duration-300 ease-in-out data-closed:-translate-x-full"
       >
-        <div className="flex h-full flex-col rounded-lg bg-[#061f37] shadow-xs ring-1 ring-white/10">
+        <div className="flex h-full flex-col rounded-xl bg-[#071827] shadow-2xl shadow-slate-950/30 ring-1 ring-white/10">
           <div className="-mb-3 px-4 pt-3">
             <Headless.CloseButton as={NavbarItem} aria-label="Close navigation">
               <CloseMenuIcon />
@@ -53,9 +53,12 @@ export function SidebarLayout({
   let [showSidebar, setShowSidebar] = useState(false)
 
   return (
-    <div className="relative isolate flex min-h-svh w-full overflow-x-hidden bg-[#f3f7fb] max-lg:flex-col dark:bg-zinc-950">
+    <div className="relative isolate flex min-h-svh w-full overflow-x-hidden bg-[#eef3f8] max-lg:flex-col dark:bg-zinc-950">
       {/* Sidebar on desktop */}
-      <motion.div layoutScroll className="fixed inset-y-0 left-0 w-56 bg-[#061f37] max-lg:hidden">
+      <motion.div
+        layoutScroll
+        className="fixed inset-y-0 left-0 w-60 border-r border-white/10 bg-[#071827] shadow-2xl shadow-slate-950/20 max-lg:hidden"
+      >
         {sidebar}
       </motion.div>
 
@@ -65,7 +68,7 @@ export function SidebarLayout({
       </MobileSidebar>
 
       {/* Navbar on mobile */}
-      <header className="flex items-center px-4 lg:hidden">
+      <header className="flex items-center border-b border-slate-200/80 bg-white/90 px-4 backdrop-blur lg:hidden">
         <div className="py-2.5">
           <NavbarItem onClick={() => setShowSidebar(true)} aria-label="Open navigation">
             <OpenMenuIcon />
@@ -75,8 +78,8 @@ export function SidebarLayout({
       </header>
 
       {/* Content */}
-      <main className="flex min-w-0 flex-1 flex-col lg:pl-56">
-        <div className="grow bg-[#f6f9fc] p-2.5 xl:p-3 dark:bg-zinc-900">
+      <main className="flex min-w-0 flex-1 flex-col lg:pl-60">
+        <div className="grow bg-[#f4f7fb] p-3 xl:p-4 dark:bg-zinc-900">
           <div className="min-h-full w-full max-w-none">{children}</div>
         </div>
       </main>

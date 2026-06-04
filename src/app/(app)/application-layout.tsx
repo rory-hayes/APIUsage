@@ -71,7 +71,7 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
 function WorkspaceMark({ initials, color = 'bg-blue-600' }: { initials: string; color?: string }) {
   return (
     <span
-      className={`flex size-7 shrink-0 items-center justify-center rounded-md text-xs/6 font-semibold text-white ${color}`}
+      className={`flex size-8 shrink-0 items-center justify-center rounded-lg text-xs/6 font-semibold text-white shadow-sm shadow-slate-950/20 ring-1 ring-white/15 ${color}`}
     >
       {initials}
     </span>
@@ -121,8 +121,8 @@ export function ApplicationLayout({
           <SidebarHeader>
             <Dropdown>
               <DropdownButton as={SidebarItem}>
-                <WorkspaceMark initials={currentWorkspaceInitials} />
-                <SidebarLabel>{currentWorkspaceName}</SidebarLabel>
+                <WorkspaceMark initials={currentWorkspaceInitials} color="bg-[#2563eb]" />
+                <SidebarLabel className="font-semibold text-white">{currentWorkspaceName}</SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
@@ -217,10 +217,10 @@ export function ApplicationLayout({
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  <Avatar initials={initials} className="size-10 bg-blue-600 text-white" square />
+                  <Avatar initials={initials} className="size-10 bg-white/10 text-white ring-1 ring-white/15" square />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-white">{session.name}</span>
-                    <span className="block truncate text-xs/5 font-normal text-sky-100/60">{roleLabel}</span>
+                    <span className="block truncate text-xs/5 font-normal text-slate-400">{roleLabel}</span>
                   </span>
                 </span>
                 <ChevronUpIcon />

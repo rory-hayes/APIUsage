@@ -91,7 +91,7 @@ export default async function Home() {
       <div className={dashboardLayout.header}>
         <div>
           <h1 className="text-2xl/7 font-semibold text-[#07143a] 2xl:text-3xl/8">Revenue Integrity OS</h1>
-          <p className="mt-1 max-w-3xl text-sm/5 text-slate-500">
+          <p className="mt-1 max-w-3xl text-sm/5 font-medium text-slate-500">
             {workspace.organizationName} - {workspace.auditPeriod} control cockpit for usage, billing, contracts, and
             AI/API margin.
           </p>
@@ -165,7 +165,7 @@ export default async function Home() {
           )}
         </Panel>
 
-        <Panel className="bg-gradient-to-b from-blue-50 to-white">
+        <Panel className="bg-[linear-gradient(180deg,#eff6ff_0%,#ffffff_66%)]">
           <h2 className="text-sm/6 font-semibold text-slate-950">Weekly Summary</h2>
           {weeklySummary.length === 0 ? (
             <div className="mt-4 rounded-lg border border-blue-100 bg-white/70 px-4 py-8 text-sm/6 font-medium text-slate-500">
@@ -207,9 +207,9 @@ export default async function Home() {
               No open leakage findings have been generated for this workspace yet.
             </div>
           ) : (
-            <div className="mt-3 overflow-x-auto rounded-lg border border-slate-200">
+            <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200/90 shadow-xs">
               <table className="min-w-[48rem] divide-y divide-slate-200 text-sm">
-                <thead className="bg-slate-50 text-xs/5 font-semibold uppercase text-slate-500">
+                <thead className="bg-slate-50/80 text-xs/5 font-semibold uppercase text-slate-500">
                   <tr>
                     <th className="px-4 py-2.5 text-left">Account</th>
                     <th className="px-4 py-2.5 text-left">Issue Type</th>
@@ -220,14 +220,14 @@ export default async function Home() {
                 </thead>
                 <tbody className="divide-y divide-slate-100 bg-white">
                   {riskAccounts.map((account) => (
-                    <tr key={`${account.account}-${account.issue}`} className="hover:bg-blue-50/40">
-                      <td className="px-4 py-2.5 font-semibold text-slate-900">{account.account}</td>
-                      <td className="px-4 py-2.5 text-slate-600">{account.issue}</td>
-                      <td className="px-4 py-2.5 text-right font-semibold text-slate-900">{account.impact}</td>
-                      <td className="px-4 py-2.5">
+                    <tr key={`${account.account}-${account.issue}`} className="transition-colors hover:bg-blue-50/45">
+                      <td className="px-4 py-3 font-semibold text-slate-900">{account.account}</td>
+                      <td className="px-4 py-3 text-slate-600">{account.issue}</td>
+                      <td className="px-4 py-3 text-right font-semibold text-slate-900">{account.impact}</td>
+                      <td className="px-4 py-3">
                         <Badge color={account.statusColor}>{account.status}</Badge>
                       </td>
-                      <td className="px-4 py-2.5 text-slate-600">{account.detected}</td>
+                      <td className="px-4 py-3 text-slate-600">{account.detected}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -550,13 +550,13 @@ function KpiCard({
   iconClassName: string
 }) {
   return (
-    <div className="h-full rounded-lg border border-slate-200 bg-white p-3 shadow-sm shadow-slate-200/60">
+    <div className="h-full rounded-xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/70">
       <div className="flex items-start gap-3">
-        <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${iconClassName}`}>
+        <div className={`flex size-10 shrink-0 items-center justify-center rounded-lg shadow-sm ${iconClassName}`}>
           <Icon className="size-5" />
         </div>
         <div className="min-w-0">
-          <div className="text-xs/5 font-semibold text-slate-600">{label}</div>
+          <div className="text-xs/5 font-semibold text-slate-500">{label}</div>
           <div className="mt-0.5 text-xl/6 font-semibold tracking-normal text-[#07143a] 2xl:text-2xl/7">{value}</div>
           <div className="mt-1 text-xs/5 text-slate-500">
             <span className="font-semibold text-emerald-600">{delta}</span> {detail}

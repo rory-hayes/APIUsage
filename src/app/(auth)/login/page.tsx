@@ -21,9 +21,12 @@ export default async function Login({ searchParams }: { searchParams?: Promise<{
     error === 'not_invited' || error === 'email_unverified' || error === 'missing_email' || error === 'auth0'
 
   return (
-    <form action="/api/auth/login" method="POST" className="grid w-full max-w-sm grid-cols-1 gap-8">
-      <Logo className="h-8 text-zinc-950 dark:text-white forced-colors:text-[CanvasText]" />
-      <Heading>Sign in to your audit workspace</Heading>
+    <form action="/api/auth/login" method="POST" className="grid w-full max-w-md grid-cols-1 gap-7">
+      <Logo className="h-8 text-zinc-950 forced-colors:text-[CanvasText]" />
+      <div>
+        <Heading>Sign in to your audit workspace</Heading>
+        <Text className="mt-2">Access your invited revenue audit workspace.</Text>
+      </div>
       {auth0Configured ? (
         <>
           {hasAuth0AccessError ? (
@@ -31,7 +34,7 @@ export default async function Login({ searchParams }: { searchParams?: Promise<{
               Your Auth0 account is not linked to an active workspace invite.
             </div>
           ) : null}
-          <Button href="/auth/login?returnTo=%2Fauth%2Fpost-login" className="w-full">
+          <Button href="/auth/login?returnTo=%2Fauth%2Fpost-login" className="w-full py-2.5">
             Continue with Auth0
           </Button>
         </>
@@ -61,7 +64,7 @@ export default async function Login({ searchParams }: { searchParams?: Promise<{
               </TextLink>
             </Text>
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full py-2.5">
             Sign in
           </Button>
         </>
