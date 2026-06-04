@@ -12,6 +12,7 @@
     "supabase:push-local": "node scripts/push-local-to-supabase.mjs"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^4.22.0",
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "clsx": "^2.1.1",

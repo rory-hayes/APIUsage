@@ -1,42 +1,23 @@
 import { NextResponse } from 'next/server'
-import { z } from 'zod'
 
 import { createAuditLogEvent } from '@/lib/audit/audit-log'
 import { getAuditLogStore, getInviteStore, getWorkspaceStore } from '@/lib/audit/upload-runtime'
-import {
-  DEFAULT_SESSION_TTL_SECONDS,
-  SESSION_COOKIE_NAME,
-  type Session,
-  createLoginSession,
-  getSessionSecret,
-} from '@/lib/auth/access'
-import { isAuth0Configured } from '@/lib/auth/auth0-session'
+import { DEFAULT_SESSION_TTL_SECONDS, getSessionSecret, SESSION_COOKIE_NAME, type Session } from '@/lib/auth/access'
+import { auth0 } from '@/lib/auth/auth0-runtime'
+import { createAuth0LoginSession } from '@/lib/auth/auth0-session'
 
-const loginInputSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-})
+export async function GET(request: Request) {
+  const auth0Session = await auth0.getSession()
 
-export async function POST(request: Request) {
-  if (isAuth0Configured()) {
-    return NextResponse.redirect(new URL('/auth/login?returnTo=%2Fauth%2Fpost-login', request.url), { status: 303 })
-  }
-
-  const formData = await request.formData()
-  const input = loginInputSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  })
-
-  if (!input.success) {
-    return invalidCredentialsResponse(request)
+  if (!auth0Session) {
+    return redirectToLogin(request, 'auth0')
   }
 
   const dynamicInvitedUsers = await getInviteStore().listActiveInvitedUsers()
-  const result = createLoginSession(input.data, getSessionSecret(), new Date(), dynamicInvitedUsers)
+  const result = createAuth0LoginSession(auth0Session.user, getSessionSecret(), new Date(), dynamicInvitedUsers)
 
   if (!result.ok) {
-    return invalidCredentialsResponse(request)
+    return redirectToLogin(request, result.error)
   }
 
   await appendLoginAuditEvent(result.session)
@@ -53,8 +34,8 @@ export async function POST(request: Request) {
   return response
 }
 
-function invalidCredentialsResponse(request: Request) {
-  return NextResponse.redirect(new URL('/login?error=invalid', request.url), { status: 303 })
+function redirectToLogin(request: Request, error: string) {
+  return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error)}`, request.url), { status: 303 })
 }
 
 async function appendLoginAuditEvent(session: Session): Promise<void> {
@@ -75,6 +56,7 @@ async function appendLoginAuditEvent(session: Session): Promise<void> {
       targetType: 'workspace',
       workspaceId,
       metadata: {
+        authProvider: 'auth0',
         email: session.email,
         role: session.role,
       },

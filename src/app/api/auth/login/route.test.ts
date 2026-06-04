@@ -9,6 +9,10 @@ import { SESSION_COOKIE_NAME } from '@/lib/auth/access'
 import { POST } from './route'
 
 const ORIGINAL_ENV = {
+  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
+  AUTH0_SECRET: process.env.AUTH0_SECRET,
   AUDIT_INVITE_PATH: process.env.AUDIT_INVITE_PATH,
   AUDIT_LOG_PATH: process.env.AUDIT_LOG_PATH,
   AUDIT_SESSION_SECRET: process.env.AUDIT_SESSION_SECRET,
@@ -67,6 +71,23 @@ describe('login route', () => {
 
     expect(response.status).toBe(303)
     expect(response.headers.get('location')).toBe('http://localhost/login?error=invalid')
+    expect(response.headers.get('set-cookie')).toBeNull()
+    await expect(getAuditLogStore().listByWorkspace(DEFAULT_WORKSPACE_ID)).resolves.toEqual([])
+  })
+
+  it('does not allow the local password endpoint when Auth0 is configured', async () => {
+    process.env.AUTH0_CLIENT_ID = 'client-id'
+    process.env.AUTH0_CLIENT_SECRET = 'client-secret'
+    process.env.AUTH0_DOMAIN = 'example.auth0.com'
+    process.env.AUTH0_SECRET = 'x'.repeat(64)
+    const formData = new FormData()
+    formData.set('email', 'customer@acme.ai')
+    formData.set('password', 'pilot')
+
+    const response = await POST(new Request('http://localhost/api/auth/login', { body: formData, method: 'POST' }))
+
+    expect(response.status).toBe(303)
+    expect(response.headers.get('location')).toBe('http://localhost/auth/login?returnTo=%2Fauth%2Fpost-login')
     expect(response.headers.get('set-cookie')).toBeNull()
     await expect(getAuditLogStore().listByWorkspace(DEFAULT_WORKSPACE_ID)).resolves.toEqual([])
   })
