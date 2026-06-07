@@ -50,6 +50,9 @@ describe('workspace settings page', () => {
   let tempDir: string
 
   beforeEach(async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-06-03T11:00:00.000Z'))
+
     tempDir = await mkdtemp(join(tmpdir(), 'uri-settings-page-'))
     process.env.AUDIT_PRICING_RULE_PATH = join(tempDir, 'pricing-rules.json')
     process.env.AUDIT_RECONCILIATION_SCHEDULE_PATH = join(tempDir, 'reconciliation-schedules.json')
@@ -73,6 +76,7 @@ describe('workspace settings page', () => {
   afterEach(async () => {
     sessionState.current = null
     restoreEnv()
+    vi.useRealTimers()
     await rm(tempDir, { force: true, recursive: true })
   })
 
